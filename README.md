@@ -9,21 +9,23 @@ _Note this is a documentation project for setting up a dockerised development en
 
 1. install Git client (>1.6.5)
 2. install Virtualbox (>5.x)
-3. install Vagrant (>1.7.3)
+3. install [Vagrant (>1.7.4)](https://www.vagrantup.com/downloads.html)
 4. install hostmanager plugin: `$ vagrant plugin install hostmanager`
-5. create a local Projects directory (can be called anything): `$ mkdir ~/Projects`
+5. create a local Projects directory (can be called anything): `$ mkdir ~/Workbench`
 6. copy Workbench VM Vagrantfile into Projects directory: https://github.com/Daemonite/workbench/blob/master/Vagrantfile
 
 Test installation and make sure everything is running by bringing up the Workbench DockerUI view:
 ```
-cd ~/Projects
+cd ~/Workbench
 vagrant up
 open http://workbench:81
 ```
 
+_Note, you may be prompted for your admin password by `hostmanager` when it attempts to update your local hosts file._
+
 Test drive a project:
 ```
-cd ~/Projects
+cd ~/Workbench
 git clone --recursive git@github.com:modius/chelsea-docker.git
 cd chelsea-docker
 vagrant up --no-parallel
@@ -35,7 +37,7 @@ open http://workbench:8009/
 The Workbench assumes a simple hierarchy of Docker projects.  Each app or Docker image is isolated in its own Git repo.  Developers clone environment repos into their Projects folder.
 
 ```
-~/Projects
+~/Workbench
 ├── Vagrantfile <-- Boot2Docker VM
 ├── aoc-env-corporate <-- git repo
 │   ├── Dockerfile

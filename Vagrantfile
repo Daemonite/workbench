@@ -3,7 +3,7 @@
 #
 VAGRANTFILE_API_VERSION = "2"
 WORKBENCH_IP = "172.22.22.22"
-Vagrant.require_version ">= 1.7.3"
+Vagrant.require_version ">= 1.7.4"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # configure hostmanager plugin; https://github.com/smdahlen/vagrant-hostmanager
@@ -35,15 +35,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ##################################################
   # Provision Workbench
   ##################################################
-  # clean up containers prior to provisioning
-  config.vm.provision "shell", inline: "docker rm --force `docker ps -qa`"
-  # start nginx-proxy; https://github.com/jwilder/nginx-proxy
-  config.vm.provision "shell", inline: "docker run -d -p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro' --name docker-proxy jwilder/nginx-proxy"
-  # start dockerui; https://github.com/crosbymichael/dockerui
-  config.vm.provision "shell", inline: "docker run -d -p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev' --name dockerui dockerui/dockerui"
-  # stock cache with common images
-  config.vm.provision "shell", inline: "docker pull -a lucee/lucee-nginx"
-  config.vm.provision "shell", inline: "docker pull tutum/mysql:5.6"
+  config.vm.provision "shell", inline: <<-SHELL
+    # clean up containers prior to provisioning
+    docker rm --force `docker ps -qa`
+    # start nginx-proxy; https://github.com/jwilder/nginx-proxy
+    docker run -d -p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro' --name docker-proxy jwilder/nginx-proxy
+    # start dockerui; https://github.com/crosbymichael/dockerui
+    docker run -d -p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev' --name dockerui dockerui/dockerui
+    # stock cache with common images
+    docker pull -a lucee/lucee-nginx
+    docker pull tutum/mysql:5.6
+  SHELL
 
 # /config
 end

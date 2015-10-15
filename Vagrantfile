@@ -26,11 +26,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dh.vm.synced_folder ".", "/vagrant", type: "virtualbox"
 
     dh.vm.provider "virtualbox" do |vb|
-      vb.memory = 2048
+      vb.memory = 4096
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nictype2", "virtio"]
     end
 
   end
+
 
   ##################################################
   # Provision Workbench
@@ -42,6 +44,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     docker run -d -p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro' --name docker-proxy jwilder/nginx-proxy
     # start dockerui; https://github.com/crosbymichael/dockerui
     docker run -d -p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev' --name dockerui dockerui/dockerui
+    # start cAdvisor; https://github.com/google/cadvisor
+    docker run -v '/:/rootfs:ro' -v '/var/run:/var/run:rw' -v '/sys:/sys:ro' -v '/var/lib/docker/:/var/lib/docker:ro' -p 82:8080 --detach=true --name=cadvisor google/cadvisor:latest
     # stock cache with common images
     docker pull -a lucee/lucee-nginx
     docker pull tutum/mysql:5.6

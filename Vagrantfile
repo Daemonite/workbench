@@ -1,11 +1,11 @@
-# 
+################################################## 
 # Daemonite Docker Workbench
-#
-VAGRANTFILE_API_VERSION = "2"
+# v1.0
+##################################################
 WORKBENCH_IP = "172.22.22.22"
 Vagrant.require_version ">= 1.7.4"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+Vagrant.configure("2") do |config|
   # configure hostmanager plugin; https://github.com/smdahlen/vagrant-hostmanager
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
@@ -37,19 +37,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ##################################################
   # Provision Workbench
   ##################################################
-  config.vm.provision "shell", inline: <<-SHELL
-    # clean up containers prior to provisioning
-    docker rm --force `docker ps -qa`
+  config.vm.provision "docker" do |d|
+    d.images = ["tutum/mysql:5.6", "lucee/lucee-nginx"]
     # start nginx-proxy; https://github.com/jwilder/nginx-proxy
-    docker run -d -p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro' --name docker-proxy jwilder/nginx-proxy
+    d.run "jwilder/nginx-proxy", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
     # start dockerui; https://github.com/crosbymichael/dockerui
-    docker run -d -p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev' --name dockerui dockerui/dockerui
+    d.run "dockerui/dockerui", args: "-p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev'"
     # start cAdvisor; https://github.com/google/cadvisor
-    docker run -v '/:/rootfs:ro' -v '/var/run:/var/run:rw' -v '/sys:/sys:ro' -v '/var/lib/docker/:/var/lib/docker:ro' -p 82:8080 --detach=true --name=cadvisor google/cadvisor:latest
-    # stock cache with common images
-    docker pull -a lucee/lucee-nginx
-    docker pull tutum/mysql:5.6
-  SHELL
+    d.run "google/cadvisor", args: "-v '/:/rootfs:ro' -v '/var/run:/var/run:rw' -v '/sys:/sys:ro' -v '/var/lib/docker/:/var/lib/docker:ro' -p 82:8080 --detach=true"
+  end
 
 # /config
 end

@@ -4,15 +4,18 @@ _Note this is a documentation project for setting up a dockerised development en
 
 ## Installation
 
-> Enough babble.. just get on with it!
-> _Anonymous_
+> Enough babble.. i don't want to understand it, just install it!
+> _Disgruntled Anonymous_
 
 1. install Git client (>1.6.5)
 2. install Virtualbox (>5.x)
 3. install [Vagrant (>1.7.4)](https://www.vagrantup.com/downloads.html)
-4. install hostmanager plugin: `$ vagrant plugin install hostmanager`
-5. create a local Projects directory (can be called anything): `$ mkdir ~/Workbench`
-6. copy Workbench VM Vagrantfile into ~/Workbench directory: https://github.com/Daemonite/workbench/blob/master/Vagrantfile
+4. install hostmanager plugin: 
+   `$ vagrant plugin install hostmanager`
+5. create a local projects directory (can be called anything): 
+   `$ mkdir ~/Workbench`
+6. copy Workbench VM `Vagrantfile` into `~/Workbench` directory, located here in this project: 
+   https://github.com/Daemonite/workbench/blob/master/Vagrantfile
 
 Test installation and make sure everything is running by bringing up the Workbench DockerUI view:
 ```

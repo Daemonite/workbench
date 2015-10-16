@@ -13,6 +13,8 @@ Vagrant.configure("2") do |config|
   config.hostmanager.include_offline = true
   
 
+  config.ssh.forward_agent = true
+
   ##################################################
   # Start Docker host
   ##################################################
@@ -37,6 +39,9 @@ Vagrant.configure("2") do |config|
   ##################################################
   # Provision Workbench
   ##################################################
+  # clean up containers prior to provisioning
+  config.vm.provision "shell", inline: "docker rm --force `docker ps -qa`"
+
   config.vm.provision "docker" do |d|
     d.images = ["tutum/mysql:5.6", "lucee/lucee-nginx"]
     # start nginx-proxy; https://github.com/jwilder/nginx-proxy

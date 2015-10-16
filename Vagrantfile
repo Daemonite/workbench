@@ -40,7 +40,11 @@ Vagrant.configure("2") do |config|
   # Provision Workbench
   ##################################################
   # clean up containers prior to provisioning
-  config.vm.provision "shell", inline: "docker rm --force `docker ps -qa`"
+  config.vm.provision "shell", inline: <<-SHELL
+    # clean up containers prior to provisioning
+    docker rm --force `docker ps -qa`
+    echo "Soaping.. Scrubbing.. Spongeing.. Docker cleaned!"
+  SHELL
 
   config.vm.provision "docker" do |d|
     d.images = ["tutum/mysql:5.6", "lucee/lucee-nginx"]

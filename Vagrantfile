@@ -42,12 +42,15 @@ Vagrant.configure("2") do |config|
   # clean up containers prior to provisioning
   config.vm.provision "shell", inline: <<-SHELL
     # clean up containers prior to provisioning
+    echo "Removing all containers (running, dead, or otherwise)"
     docker rm --force `docker ps -qa`
+    echo "Pruning dangling images"
+    docker rmi $(docker images -qa -f "dangling=true")
     echo "Soaping.. Scrubbing.. Spongeing.. Docker cleaned!"
   SHELL
 
   config.vm.provision "docker" do |d|
-    d.images = ["tutum/mysql:5.6", "lucee/lucee-nginx"]
+    d.images = ["tutum/mysql:5.6", "lucee/lucee4-nginx"]
     # start nginx-proxy; https://github.com/jwilder/nginx-proxy
     d.run "jwilder/nginx-proxy", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
     # start dockerui; https://github.com/crosbymichael/dockerui

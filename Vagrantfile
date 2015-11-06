@@ -52,9 +52,11 @@ Vagrant.configure("2") do |config|
   config.vm.provision "docker" do |d|
     d.images = ["tutum/mysql:5.6", "lucee/lucee4-nginx"]
     # start nginx-proxy; https://github.com/jwilder/nginx-proxy
-    d.run "jwilder/nginx-proxy", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
+    d.run "jwilder/nginx-proxy", image: "jwilder/nginx-proxy:latest", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
+    # default host displaying all running virtuals; http://workbench
+    d.run "texthtml/docker-vhosts", image: "texthtml/docker-vhosts", args: "-e VIRTUAL_HOST='workbench,workbench.dev' -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
     # start dockerui; https://github.com/crosbymichael/dockerui
-    d.run "dockerui/dockerui", args: "-p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock' -e VIRTUAL_HOST='workbench,workbench.dev'"
+    d.run "dockerui/dockerui", args: "-p 81:9000 --privileged -v '/var/run/docker.sock:/var/run/docker.sock'"
     # start cAdvisor; https://github.com/google/cadvisor
     d.run "google/cadvisor", args: "-v '/:/rootfs:ro' -v '/var/run:/var/run:rw' -v '/sys:/sys:ro' -v '/var/lib/docker/:/var/lib/docker:ro' -p 82:8080 --detach=true"
   end

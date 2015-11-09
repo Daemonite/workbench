@@ -28,14 +28,16 @@ _Note, you may be prompted for your admin password by `hostmanager` when it atte
 
 ![DockerUI](./images/wb-dockerui.jpg)
 
-Test drive a project:
+Test drive a project, you will need a HOST entry pointing at the workbench IP (172.22.22.22) for chelsea-docker.dev:
 ```
 cd ~/Workbench
 git clone --recursive git@github.com:modius/chelsea-docker.git
 cd chelsea-docker
 vagrant up --no-parallel
-open http://workbench:8009/
+open http://chelsea-docker.dev
 ```
+
+_Note, all workbench projects run from *.dev so if you can wildcard that entry with DNSMASQ or equivalent so much the better._
 
 ![Chelsea: FarCry Core](./images/wb-chelsea.jpg)
 
@@ -172,7 +174,9 @@ vagrant up --no-parallel
 
 If its the first time you have started the project it will build all the relevant Docker containers, downloading any dependencies that may be missing.
 
-You can always reach the web app through `http://workbench:XXXX` where `XXXX` is the port number dedicated to your project. Alternatively, if you have host names set up it will be more like `http://gpml.dev`.
+You reach the web app through `http://projectname.dev` where `.dev` is a suffix of your choice. You will need to set up a wildcard for `*.dev` (for example, using DNSMASQ) or a separate HOST entry for each project you are working with.
+
+The first part of the output from a vagrant command should show the hostname for the project you are working on.
 
 Every project should be designed to start up in its most common configuration. However, some projects have various configuration options; check the project's README for details.  For example, your project may support solo development with a local mysql db and collaborative development with a shared office db.
 
@@ -308,6 +312,7 @@ The **Docker Host** is designed to hold the containers of several underlying pro
 # /config
 end
 ```
+
 The Workbench is provisioned by:
 
 - removing all containers (running or dead)

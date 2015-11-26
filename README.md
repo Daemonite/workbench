@@ -225,7 +225,21 @@ $ vagrant reload gpml-solo
 _Note, `vagrant status` will tell you the name of all the containers the project builds. OR check the project README for specific details on your project._
 
 
+### Using secure connections
 
+The [nginx proxy](https://github.com/jwilder/nginx-proxy) that Workbench uses supports
+enabling SSL for all connections.
+
+1. Add a `certs` directory to your workbench directory.
+2. Add `VIRTUAL_HOST.key` and `VIRTUAL_HOST.crt` files to that directory, where
+   VIRTUAL_HOST is the value set in the Vagrant docker config for the container.
+3. Alternatively, you can use a specific certificate for a container by adding
+   `"CERT_NAME" => "sharedcert"` as an environment variable on the container,
+   where `sharedcert.key` and `sharedcert.crt` are the certificates you added.
+4. In the workbench `Vagrantfile`, find the command to run `jwilder/nginx-proxy`
+   and add `-p 443:443 -v /vagrant/certs:/etc/nginx/certs` to the arguments.
+5. Reprovision workbench: `vagrant provision workbench`.
+6. Reload your containers (see above).
 
 
 ## Workbench `Vagrantfile` explained

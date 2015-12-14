@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "docker" do |d|
     d.images = ["tutum/mysql:5.6", "lucee/lucee4-nginx"]
     # start nginx-proxy; https://github.com/jwilder/nginx-proxy
-    d.run "jwilder/nginx-proxy", image: "jwilder/nginx-proxy:latest", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
+    d.run "daemonite/workbench-proxy", image: "daemonite/workbench-proxy:latest", args: "-p 80:80 -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
     # default host displaying all running virtuals; http://workbench
     d.run "texthtml/docker-vhosts", image: "texthtml/docker-vhosts", args: "-e VIRTUAL_HOST='workbench,workbench.dev' -v '/var/run/docker.sock:/tmp/docker.sock:ro'"
     # start dockerui; https://github.com/crosbymichael/dockerui

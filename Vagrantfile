@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
-
+  
   # setting that appears to help provisioning on Windows
   config.ssh.forward_agent = true
 
@@ -22,6 +22,8 @@ Vagrant.configure("2") do |config|
     
     # configure virtual machine
     dh.vm.box = "dduportal/boot2docker"
+    dh.vm.box_check_update = false
+    dh.vm.box_version = "1.8.3"
     dh.vm.hostname = "workbench"
     dh.vm.network :private_network, ip: WORKBENCH_IP
     dh.hostmanager.aliases = %w(workbench.dev workbench)

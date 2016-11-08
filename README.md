@@ -1,5 +1,27 @@
 # Daemonite Docker Development Workbench
 
+The team has moved to a GO based app to replace Vagrant:
+
+https://github.com/justincarter/docker-workbench
+
+`docker-workbench` is a utility for simplifying the creation of Docker-based development environments in VirtualBox with `docker-machine`.
+
+The primary goals of `docker-workbench` are;
+
+1. To make it easy to create Docker machines in VirtualBox with sensible defaults (CPUs, disk size, RAM, etc)
+2. To make it easy to run multiple containerised web applications without managing DNS, hosts files or ports
+3. To provide a standard `/workbench` shared folder to allow `docker-compose` volumes work the same for multiple users, cross-platform
+4. To allow mobile, tablet and other network devices to easily access the containerised applications
+
+Enjoy!
+
+PS. Go here https://github.com/justincarter/docker-workbench
+
+
+----
+
+# WARNING: Our *old* Vagrant based approach follows
+
 _Note this is a documentation project for setting up a dockerised development environment with Vagrant and Virtualbox.  Don't just clone and run because you won't get far ;)_
 
 ## Installation
